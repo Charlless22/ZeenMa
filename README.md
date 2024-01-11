@@ -1,2 +1,7 @@
-# ZeenMa
-This App has been create in React Native for people who need an app to manage their money.
+#  What is ZeenMa
+This App has been create in React Native with expo to help people that need help to manage their personal money.
+
+## The Front-end
+
+## The Back-end
+
