@@ -1,11 +1,24 @@
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, {useState} from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image} from 'react-native';
 import Svg, { G, Path, Defs, ClipPath, Rect } from 'react-native-svg';
+import { auth } from '../config/firebase';
 
-export default function ItemsScreen( {navigation} ) {
-  const [username, setUsername] = useState('');
+export default function LoginScreen( {navigation} ) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+
+  const handleLogin = async ()=> {
+    if (email && password) {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        navigation.navigate("Home");
+      } catch(err) {
+        console.log('got an error', err.message);
+      }
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={ styles.topPage }>
@@ -23,15 +36,15 @@ export default function ItemsScreen( {navigation} ) {
           <View style={ styles.loginTitle }>
             <Text style={ { fontSize: 20, fontWeight: "bold" } }>Welcome back on ZeenMa 👋</Text>
           </View>
-          <View style={ styles.test }>
+          <View style={ styles.formDiv }>
             <View style={ styles.labels }>
               <Text style={ { color: "black" } }>Email</Text>
             </View>
             <TextInput
                 style={styles.inputs}
-                placeholder="Username"
-                onChangeText={(text) => setUsername(text)}
-                value={username}
+                placeholder="email"
+                onChangeText={(text) => setEmail(text)}
+                value={email}
             />
             <View style={ styles.labels }>
                 <Text style={ { color: "black" } }>Password</Text>
@@ -43,12 +56,24 @@ export default function ItemsScreen( {navigation} ) {
                 onChangeText={(text) => setPassword(text)}
                 value={password}
             />
+            <View style={ styles.linksView }>
+              <TouchableOpacity onPress={() => navigation.navigate("ForgetScreen")}>
+                <Text>
+                    Forget Password ?
+                  </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
+                <Text>
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
       <View style={ styles.bottomPage }>
         <View style={ styles.loginButtonDiv }>
-          <TouchableOpacity style={ styles.loginButton } onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity style={ styles.loginButton } onPress={handleLogin}>
             <Text style={ { fontWeight: "bold" } }>Login</Text>
           </TouchableOpacity>
         </View>
@@ -95,7 +120,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FFF5EA",
   },
-  test: {
+  formDiv: {
     width: "100%",
     height: "100%",
     display: "flex",
@@ -125,6 +150,16 @@ const styles = StyleSheet.create({
     width: "80%",
     marginBottom: "2%",
     marginTop: "2%",
+  },
+  linksView: {
+    width: "100%",
+    display: "flex",
+    backgroundColor: "FFF5EA",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 120,
+    marginTop: "5%",
   },
   bottomPage: {
     width: "100%",
